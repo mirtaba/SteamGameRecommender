@@ -45,17 +45,25 @@ def get_owned_games(steam_id):
 def insert_user_to_db(steam_id):
     # Avoid duplicate inserts
     if is_inserted_before(steam_id):
-        return
+        return 0
 
     total_games, games = get_owned_games(steam_id)
+
+    # for Private accounts
+    if games is None:
+        return 1
+
     game_ids = []
 
     for game in games:
         if game['playtime_forever'] >= game_time_played_threshold:
             game_ids.append(game['appid'])
+
     # User one of below:
     insert_user_bulk(steam_id, game_ids)
     # insert_user_one(steam_id, game_ids)
+
+    return 0
 
 
 def run(time_until):
@@ -65,13 +73,15 @@ def run(time_until):
             break
 
         steam_id = seed_steam_ids.pop()
-        insert_user_to_db(steam_id)
+        is_private = insert_user_to_db(steam_id)
 
-        for friend in get_friend_list(steam_id):
-            friend_steam_id = friend['steamid']
-            if not is_inserted_before(friend_steam_id):
-                seed_steam_ids.append(friend_steam_id)
+        if is_private == 0:
+            for friend in get_friend_list(steam_id):
+                friend_steam_id = friend['steamid']
+                # print(str(friend_steam_id))
+                if not is_inserted_before(friend_steam_id):
+                    seed_steam_ids.append(friend_steam_id)
+    exec_inserts()
 
 
-run(datetime.now() + timedelta(minutes=5))
-exec_inserts()
+run(datetime.now() + timedelta(minutes=1))
