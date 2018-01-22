@@ -60,9 +60,10 @@ def insert_user_to_db(steam_id):
         if game['playtime_forever'] >= game_time_played_threshold:
             game_ids.append(game['appid'])
 
-    # User one of below:
-    # insert_user_bulk(steam_id, game_ids)
-    insert_user_one(steam_id, game_ids)
+    if len(game_ids) > 0:
+        # User one of below:
+        insert_user_bulk(steam_id, game_ids)
+        # insert_user_one(steam_id, game_ids)
 
     return 0
 
