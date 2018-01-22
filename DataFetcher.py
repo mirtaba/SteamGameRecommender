@@ -6,6 +6,7 @@ from DatabaseHandler import *
 steam_api_key = '532BCE1457C92CBA3F93BB5BBAF84A16'
 game_time_played_threshold = 100
 seed_steam_ids = ['76561198023653599']
+seed_max_size = 100*100*100
 
 
 def get_player_summaries(steam_ids):
@@ -60,8 +61,8 @@ def insert_user_to_db(steam_id):
             game_ids.append(game['appid'])
 
     # User one of below:
-    insert_user_bulk(steam_id, game_ids)
-    # insert_user_one(steam_id, game_ids)
+    # insert_user_bulk(steam_id, game_ids)
+    insert_user_one(steam_id, game_ids)
 
     return 0
 
@@ -79,7 +80,7 @@ def run(time_until):
             for friend in get_friend_list(steam_id):
                 friend_steam_id = friend['steamid']
                 # print(str(friend_steam_id))
-                if not is_inserted_before(friend_steam_id):
+                if not is_inserted_before(friend_steam_id) and len(seed_steam_ids) < seed_max_size:
                     seed_steam_ids.append(friend_steam_id)
     exec_inserts()
 
