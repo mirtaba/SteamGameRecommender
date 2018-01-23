@@ -4,7 +4,7 @@ client = MongoClient('localhost', 27017)
 
 db = client['game_recommender']
 
-bulk_write_val = 500
+bulk_write_val = 100
 num_of_datas = 0
 datas = []
 

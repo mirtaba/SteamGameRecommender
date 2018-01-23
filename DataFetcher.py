@@ -1,3 +1,5 @@
+from json import JSONDecodeError
+
 import requests
 import json
 from datetime import datetime, timedelta
@@ -6,7 +8,7 @@ from DatabaseHandler import *
 steam_api_key = '532BCE1457C92CBA3F93BB5BBAF84A16'
 game_time_played_threshold = 100
 seed_steam_ids = ['76561198023653599']
-seed_max_size = 100*100*100
+seed_max_size = 100 * 100 * 100
 
 
 def get_player_summaries(steam_ids):
@@ -23,8 +25,10 @@ def get_player_summaries(steam_ids):
 def get_friend_list(steam_id):
     res = requests.get("http://api.steampowered.com/ISteamUser/GetFriendList/v0001/",
                        params={'key': steam_api_key, 'steamid': steam_id, 'relationship': 'all'})
-
-    friends = json.loads(res.content.decode('utf-8')).get('friendslist').get('friends')
+    try:
+        friends = json.loads(res.content.decode('utf-8')).get('friendslist').get('friends')
+    except JSONDecodeError:
+        return []
 
     # friends in form of array -->
     # [{'steamid': '76561197960265731', 'relationship': 'friend', 'friend_since': 0}, ...]
@@ -32,10 +36,13 @@ def get_friend_list(steam_id):
 
 
 def get_owned_games(steam_id):
-    res = requests.get("http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/",
-                       params={'key': steam_api_key, 'steamid': steam_id})
-
+    try:
+        res = requests.get("http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/",
+                           params={'key': steam_api_key, 'steamid': steam_id})
+    except ConnectionError:
+        return 0, None
     game_dict = json.loads(res.content.decode('utf-8')).get('response')
+
     game_count = game_dict.get('game_count')
     games = game_dict.get('games')
 
