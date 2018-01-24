@@ -93,4 +93,5 @@ def run(time_until):
     exec_inserts()
 
 
-run(datetime.now() + timedelta(minutes=1))
+if __name__ == '__main__':
+    run(datetime.now() + timedelta(minutes=1))
