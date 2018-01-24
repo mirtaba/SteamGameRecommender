@@ -29,6 +29,10 @@ def exec_inserts():
     num_of_datas = 0
 
 
+def insert_games_bulk(games):
+    db.games.insert_many(games)
+
+
 def is_inserted_before(steam_id):
     res = db.users.find_one({'steam_id': str(steam_id)})
     if res is not None:
