@@ -22,6 +22,6 @@ def insert_games_to_db(games):
 
     insert_games_bulk(games_list)
 
-
-insert_games_to_db(get_all_games())
+if __name__ == '__main__':
+    insert_games_to_db(get_all_games())
 # get_all_games()
