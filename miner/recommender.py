@@ -61,7 +61,7 @@ def user_recommended_games(steam_id):
 
     return recommending_games;
 
-
-print(user_recommended_games("76561198023653599"))
+if __name__ == '__main__':
+    print(user_recommended_games("76561198023653599"))
 
 
