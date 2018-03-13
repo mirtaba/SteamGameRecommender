@@ -103,3 +103,6 @@ ENV/
 # pycharm IDE files
 .idea/
 
+# Sensitive keys/passwords
+*.key
+

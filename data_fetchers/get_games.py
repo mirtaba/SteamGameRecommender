@@ -2,7 +2,7 @@ from json import JSONDecodeError
 
 import requests
 import json
-from DatabaseHandler import *
+from handlers.DatabaseHandler import *
 
 
 def get_all_games():
