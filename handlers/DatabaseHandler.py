@@ -50,6 +50,10 @@ def last_added_user():
     res = db.users.find().sort([('steam_id', -1)]).limit(1)
     return res.next()['steam_id']
 
+def get_inline_iterator():
+    res = db.users.find().sort([('steam_id', 1)])
+    return res
+
 
 if __name__ == '__main__':
     last_added_user()
